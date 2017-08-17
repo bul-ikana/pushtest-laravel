@@ -47,6 +47,8 @@ class SendPushNotification implements ShouldQueue
         $notificationBuilder = new PayloadNotificationBuilder;
         $notificationBuilder->setClickAction("TabActivity");
 
+        $dataBuilder = new PayloadDataBuilder;
+
         switch ($this->animal) {
             case "cat":
                 $notificationBuilder
@@ -55,6 +57,8 @@ class SendPushNotification implements ShouldQueue
                     ->setIcon('cat_black')
                     ->setColor('#ffab00')
                     ->setSound('default');
+
+                $dataBuilder->setData(['animal' => "cat"]);
             break;
 
             case "cow":
@@ -64,6 +68,8 @@ class SendPushNotification implements ShouldQueue
                     ->setIcon('cow_black')
                     ->setColor('#aeaeaf')
                     ->setSound('default');
+
+                    $dataBuilder->setData(['animal' => "cow"]);
             break;
 
             case "dog":
@@ -73,6 +79,8 @@ class SendPushNotification implements ShouldQueue
                     ->setIcon('dog_black')
                     ->setColor('#b19267')
                     ->setSound('default');
+
+                    $dataBuilder->setData(['animal' => "dog"]);
             break;
 
             case "duck":
@@ -82,6 +90,8 @@ class SendPushNotification implements ShouldQueue
                     ->setIcon('duck_black')
                     ->setColor('#bd7f00')
                     ->setSound('default');
+
+                    $dataBuilder->setData(['animal' => "duck"]);
             break;
 
             case "pig":
@@ -91,6 +101,8 @@ class SendPushNotification implements ShouldQueue
                     ->setIcon('pig_black')
                     ->setColor('#d37b93')
                     ->setSound('default');
+
+                    $dataBuilder->setData(['animal' => "pig"]);
             break;
 
             default:
@@ -104,7 +116,9 @@ class SendPushNotification implements ShouldQueue
 
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
+        $data = $dataBuilder->build();
         \Log::info($notification->toArray());
-        FCM::sendTo($this->token, $option, $notification);
+        \Log::info($data->toArray());
+        FCM::sendTo($this->token, $option, $notification, $data);
     }
 }
