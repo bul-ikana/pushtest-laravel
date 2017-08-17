@@ -18,6 +18,8 @@ class SendPushNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 128;
+
     protected $animal;
     protected $token;
 
@@ -43,6 +45,7 @@ class SendPushNotification implements ShouldQueue
         $optionBuilder->setTimeToLive(60 * 20);
 
         $notificationBuilder = new PayloadNotificationBuilder;
+        $notificationBuilder->setClickAction("TabActivity");
 
         switch ($this->animal) {
             case "cat":
@@ -101,6 +104,7 @@ class SendPushNotification implements ShouldQueue
 
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
+        \Log::info($notification->toArray());
         FCM::sendTo($this->token, $option, $notification);
     }
 }
