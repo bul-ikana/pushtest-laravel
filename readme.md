@@ -6,8 +6,6 @@ A simple example of using [brozot/Laravel-FCM](https://github.com/brozot/Laravel
 
 This project sends a push notification to mobile devices upon request. Once installed, a `GET`request to `http://[project root]/api/push?animal=[animal]&token=[FCM token]` will send a push notification to the device whose FCM token was provided. 
 
-The notification job will be sent to the queue and processed eventually by the queue worker. This speeds up web requests as sending of notifications is processed asynchronously. If you want to send the notification immediately after processing the request, check the `simple-motification` tag of this repo, which uses no queues.
-
 A different notification will be sent depending on the animal parameter. The available animals are:
 
 * cat
@@ -20,6 +18,10 @@ Any other animal will send a default notification.
 
 It is easier to test, and intended to be used with [pushtest-android](https://github.com/bul-ikana/pushtest-android).
 
+## How it works?
+
+A call to the controller will dispatch a `SendPushNotification` job to be sent to the queue and processed eventually by the queue worker. This speeds up web requests as sending of notifications is processed asynchronously. If you want to send the notification immediately after processing the request, check the `simple-notification` tag of this repo, which uses no queues. The _notification_ part defines how the notification will show on the user notifacation center. The data part sets extra data than will be passed to the screen defined in the `click_action` value of the _notification_.
+
 ## Running the project
 
 * Make sure you have Laravel ready development or staging environment. [Homestead](https://laravel.com/docs/master/homestead) is a great option, but not the only one
@@ -28,7 +30,7 @@ It is easier to test, and intended to be used with [pushtest-android](https://gi
 * Install dependencies running `composer install`
 * Configure your [environment](https://laravel.com/docs/5.4/configuration#environment-configuration) in the .env file. Don't forget to add your Firebase data. If you want to change the queue driver, this is the place
 * Run migrations by running `php artisan migrate`
-* Run the queue worker by running `php artisan queue:work`. Keep in mind jobs will only be processed while this process is running, so you may want to keep it running using [Supervisor](https://laravel.com/docs/5.1/queues#supervisor-configuration) or some tool like that
+* Run the queue worker in background by running `php artisan queue:work &`. Keep in mind jobs will only be processed while this process is running, so you may want to keep it running using [Supervisor](https://laravel.com/docs/5.1/queues#supervisor-configuration) or some tool like that
 * Done. Everything is ready to start accepting request and sending notifications to devices
 
 ## Questions?
